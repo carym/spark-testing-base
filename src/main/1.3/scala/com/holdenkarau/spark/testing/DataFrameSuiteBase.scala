@@ -53,7 +53,7 @@ trait DataFrameSuiteBaseLike extends SparkContextProvider with TestSuiteLike wit
     /** Constructs a configuration for hive, where the metastore is located in a temp directory. */
     val tempDir = Utils.createTempDir()
     val localMetastorePath = new File(tempDir, "metastore").getCanonicalPath
-    val localWarehousePath = new File(tempDir, "wharehouse").getCanonicalPath
+    val localWarehousePath = new File(tempDir, "warehouse").getCanonicalPath
     def newTemporaryConfiguration(): Map[String, String] = {
       val propMap: HashMap[String, String] = HashMap()
       // We have to mask all properties in hive-site.xml that relates to metastore data source
@@ -68,6 +68,7 @@ trait DataFrameSuiteBaseLike extends SparkContextProvider with TestSuiteLike wit
       propMap.put("datanucleus.rdbms.datastoreAdapterClassName",
         "org.datanucleus.store.rdbms.adapter.DerbyAdapter")
       propMap.put(ConfVars.METASTOREURIS.varname, "")
+      propMap.put("hive.metastore.warehouse.dir", localWarehousePath)
       propMap.toMap
     }
     val config = newTemporaryConfiguration()
