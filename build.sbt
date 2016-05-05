@@ -4,7 +4,7 @@ name := "spark-testing-base"
 
 publishMavenStyle := true
 
-version := "0.3.3"
+version := "0.3.3-protenus-SNAPSHOT"
 
 scalaVersion := "2.10.4"
 
@@ -14,7 +14,7 @@ javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
 
 spName := "holdenk/spark-testing-base"
 
-sparkVersion := "1.6.0"
+sparkVersion := "1.5.0"
 
 sparkComponents ++= Seq("core", "streaming", "sql", "catalyst", "hive", "streaming-kafka", "yarn", "mllib")
 
@@ -118,12 +118,23 @@ resolvers ++= Seq(
 )
 
 // publish settings
+
+/*
+ * Note that the Protenus repo requires credentials to be stored in $HOME/.ivy2/.mavencredentials
+ *
+ * That file should contain the following 4 lines (replacing user/password as approriate):
+ *
+ * realm=Sonatype Nexus
+ * host=nexus.protenus.com
+ * user=INSERT_USERNAME_HERE
+ * password=INSERT_PASSWORD_HERE
+ */
 publishTo := {
-  val nexus = "https://oss.sonatype.org/"
+  val nexus = "http://nexus.protenus.com:8081/"
   if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+    Some("snapshots" at nexus + "repository/maven-snapshots")
   else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    Some("releases"  at nexus + "repository/maven-releases")
 }
 
 licenses := Seq("Apache License 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
@@ -145,7 +156,6 @@ pomExtra := (
   </developers>
 )
 
-//credentials += Credentials(Path.userHome / ".ivy2" / ".spcredentials")
-credentials ++= Seq(Credentials(Path.userHome / ".ivy2" / ".sbtcredentials"), Credentials(Path.userHome / ".ivy2" / ".sparkcredentials"))
+credentials ++= Seq(Credentials(Path.userHome / ".ivy2" / ".sbtcredentials"), Credentials(Path.userHome / ".ivy2" / ".sparkcredentials"), Credentials(Path.userHome / ".ivy2" / ".mavencredentials") )
 
 spIncludeMaven := true
